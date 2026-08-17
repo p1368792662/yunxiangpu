@@ -1,7 +1,7 @@
 // sw.js — 离线缓存壳
-// v20：页面(HTML)网络优先；其余同源资源缓存优先+后台更新。
+// v21：页面(HTML)网络优先；其余同源资源缓存优先+后台更新。
 // 切换 CACHE 名称可彻底丢弃旧缓存，避免样式/图标残留。
-const CACHE = 'dessert-v20';
+const CACHE = 'dessert-v21';
 const SHELL = [
   './',
   './manifest.json',
