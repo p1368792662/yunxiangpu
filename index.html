@@ -1067,6 +1067,7 @@ const I18N = {
   toastCopied:'{name}已复制，此刻开始你的美味之旅',
   toastParseAdded:'已添加 {n} 项食材，价格库会自动匹配单价',
   toastPriceLoaded:'已载入原材料价格库（{n} 种材料，详见「价格库」面板）',
+  toastPriceSynced:'价格库已更新：新增 {n} 种常用材料',
   toastBuiltinLoaded:'已载入内置配方库（{n} 条），单价已按价格库自动填入，可在编辑中微调',
   toastSynced:'已同步 {n} 条新配方',
   toastEmptyCleaned:'已清理 {n} 个空配方',
@@ -1151,6 +1152,7 @@ const I18N = {
   toastCopied:'{name}をコピーしました、さあ美味しい旅を始めましょう',
   toastParseAdded:'{n} 件の食材を追加しました、価格ライブラリが単価を自動 matching',
   toastPriceLoaded:'原材料価格ライブラリを読み込みました（{n} 種類、詳細は「価格ライブラリ」パネル）',
+  toastPriceSynced:'価格ライブラリを更新しました：{n} 種類の常用材料を追加',
   toastBuiltinLoaded:'内蔵レシピライブラリを読み込みました（{n} 件）、単価は価格ライブラリから自動入力されています',
   toastSynced:'{n} 件の新しいレシピを同期しました',
   toastEmptyCleaned:'空のレシピを {n} 件削除しました',
@@ -1235,6 +1237,7 @@ const I18N = {
   toastCopied:'{name}을(를) 복사했습니다, 지금부터 맛있는 여정을 시작하세요',
   toastParseAdded:'{n} 개 식재료를 추가했습니다, 가격 라이브러리가 단가를 자동 매칭합니다',
   toastPriceLoaded:'원재료 가격 라이브러리를 불러왔습니다（{n} 종, 자세한 내용은「가격 라이브러리」패널）',
+  toastPriceSynced:'가격 라이브러리를 업데이트했습니다: {n} 종의 상용 재료 추가',
   toastBuiltinLoaded:'내장 레시피 라이브러리를 불러왔습니다（{n} 개）, 단가는 가격 라이브러리에서 자동 입력되었습니다',
   toastSynced:'{n} 개의 새 레시피를 동기화했습니다',
   toastEmptyCleaned:'빈 레시피 {n}개를 삭제했습니다',
@@ -1319,6 +1322,7 @@ const I18N = {
   toastCopied:'{name} copied. Start your delicious journey now',
   toastParseAdded:'Added {n} ingredients, price library will auto-match unit prices',
   toastPriceLoaded:'Loaded ingredient price library ({n} items, see Price Library panel)',
+  toastPriceSynced:'Price library updated: {n} common ingredients added',
   toastBuiltinLoaded:'Loaded built-in recipe library ({n} recipes), unit prices filled automatically',
   toastSynced:'Synced {n} new recipes',
   toastEmptyCleaned:'Cleaned up {n} empty recipe(s)',
@@ -1403,6 +1407,7 @@ const I18N = {
   toastCopied:'คัดลอก {name} แล้ว เริ่มต้นการเดินทางอันอร่อยของคุณตอนนี้',
   toastParseAdded:'เพิ่มวัตถุดิบ {n} รายการแล้ว คลังราคาจะจับคู่ราคาต่อหน่วยอัตโนมัติ',
   toastPriceLoaded:'โหลดคลังราคาวัตถุดิบแล้ว（{n} รายการ ดูที่แผง「คลังราคา」）',
+  toastPriceSynced:'อัปเดตคลังราคาแล้ว: เพิ่มวัตถุดิบยอดนิยม {n} รายการ',
   toastBuiltinLoaded:'โหลดคลังสูตรในตัวแล้ว（{n} สูตร）ราคาต่อหน่วยเติมอัตโนมัติจากคลังราคา',
   toastSynced:'ซิงค์สูตรใหม่ {n} สูตร',
   toastEmptyCleaned:'ลบสูตรว่าง {n} รายการแล้ว',
@@ -1640,9 +1645,9 @@ function closePrompt(value){
    统计依据：官方与批发平台实测为主，无公开渠道的小宗辅料按批发区间估算
    并在 source 中标注「估算」；价格实时波动，实际采购以供应商当日报价为准。 */
 const PRICE_LIB_KEY = 'ingredient-price-lib';
-const PRICE_GROUPS = ['蛋奶类','乳酪黄油','糖类','粉类','油脂类','坚果果干','调味辅料'];
+const PRICE_GROUPS = ['蛋奶类','乳酪黄油','糖类','粉类','油脂类','坚果果干','调味辅料','香辛料','酱料调味','粮油干货','肉禽蛋','蔬菜菌菇','水果鲜果'];
 const PRICE_SOURCE_NOTE =
-  '<b>数据来源与统计依据：</b>鸡蛋/生鲜乳价引自农业农村部全国农产品批发市场监测（2026-08）；白砂糖引自云南糖网现货报价（2026-08-10）；黄油/奶粉/奶油奶酪引自上海大宗乳品批发与招标价（2026-05~07）；面粉引自福建官桥粮食批发市场与医院食材招标（2026 上半年）；淡奶油/咸蛋黄/可可粉等引自 1688 等批发平台 2026 年 6-7 月成交价。标注「估算」的为按批发区间测算的小宗辅料。价格会实时波动，仅供成本核算参考，实际以供应商当日报价为准。';
+  '<b>数据来源与统计依据：</b>蛋奶/生鲜乳/肉禽/蔬菜/水果等生鲜价引自农业农村部全国农产品批发市场监测（2026-08）；白砂糖引自云南糖网现货报价（2026-08-10）；黄油/奶粉/奶油奶酪引自上海大宗乳品批发与招标价（2026-05~07）；面粉引自福建官桥粮食批发市场与医院食材招标（2026 上半年）；淡奶油/咸蛋黄/可可粉等引自 1688 等批发平台 2026 年 6-7 月成交价；香辛料/酱料/干货按主要批发市场 2026-08 区间价估算。价格会实时波动，仅供成本核算参考，实际以供应商当日报价为准。';
 const PRICE_LIBRARY = [
   /* ── 蛋奶类 ── */
   { name:'鸡蛋', group:'蛋奶类', kind:'piece', spec:'批发整箱 约360枚/箱', unit:'个', unitPrice:0.6, yuanPerKg:9.84, origin:'全国（山东/河北主产区）', updatedAt:'2026-08-06', source:'农业农村部批发监测' },
@@ -1704,6 +1709,175 @@ const PRICE_LIBRARY = [
   { name:'卡仕达酱', group:'调味辅料', kind:'weight', spec:'1kg 装 即溶', unit:'千克(kg)', unitPrice:20, yuanPerKg:20, origin:'国产', updatedAt:'2026-08-01', source:'按吉士粉+奶估算' },
   { name:'南瓜粉（烘焙）', group:'调味辅料', kind:'weight', spec:'1kg 装', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'国产', updatedAt:'2026-08-01', source:'电商批发估算' },
   { name:'巧克力酱', group:'调味辅料', kind:'weight', spec:'1kg 装 淋面用', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'国产', updatedAt:'2026-08-01', source:'按巧克力+淡奶油估算' },
+  /* ── 香辛料（大众厨房） ── */
+  { name:'八角', group:'香辛料', kind:'weight', spec:'500g 袋装 大红八角', unit:'千克(kg)', unitPrice:45, yuanPerKg:45, origin:'广西', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'桂皮', group:'香辛料', kind:'weight', spec:'500g 袋装 厚桂皮', unit:'千克(kg)', unitPrice:35, yuanPerKg:35, origin:'广西/广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'香叶', group:'香辛料', kind:'weight', spec:'500g 袋装 干月桂叶', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'东南亚/国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'花椒', group:'香辛料', kind:'weight', spec:'500g 袋装 大红袍', unit:'千克(kg)', unitPrice:70, yuanPerKg:70, origin:'四川/陕西', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'麻椒', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:75, yuanPerKg:75, origin:'四川', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'小茴香', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:20, yuanPerKg:20, origin:'甘肃/内蒙古', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'丁香', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:85, yuanPerKg:85, origin:'东南亚', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'草果', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:50, yuanPerKg:50, origin:'云南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'白芷', group:'香辛料', kind:'weight', spec:'500g 袋装 切片', unit:'千克(kg)', unitPrice:28, yuanPerKg:28, origin:'安徽/河北', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'砂仁', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:95, yuanPerKg:95, origin:'云南/广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'白豆蔻', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:75, yuanPerKg:75, origin:'东南亚', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'白胡椒粒', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:55, yuanPerKg:55, origin:'海南/东南亚', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'黑胡椒粒', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:50, yuanPerKg:50, origin:'海南/东南亚', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'白胡椒粉', group:'香辛料', kind:'weight', spec:'500g 袋装 粉', unit:'千克(kg)', unitPrice:45, yuanPerKg:45, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'黑胡椒粉', group:'香辛料', kind:'weight', spec:'500g 袋装 粉', unit:'千克(kg)', unitPrice:42, yuanPerKg:42, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'孜然粒', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:28, yuanPerKg:28, origin:'新疆', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'孜然粉', group:'香辛料', kind:'weight', spec:'500g 袋装 粉', unit:'千克(kg)', unitPrice:32, yuanPerKg:32, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'五香粉', group:'香辛料', kind:'weight', spec:'500g 袋装 复合粉', unit:'千克(kg)', unitPrice:24, yuanPerKg:24, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'十三香', group:'香辛料', kind:'weight', spec:'500g 袋装 复合粉', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'辣椒粉', group:'香辛料', kind:'weight', spec:'500g 袋装 细粉', unit:'千克(kg)', unitPrice:26, yuanPerKg:26, origin:'贵州/河南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'辣椒面（粗）', group:'香辛料', kind:'weight', spec:'500g 袋装 粗碎', unit:'千克(kg)', unitPrice:22, yuanPerKg:22, origin:'贵州/河南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'干辣椒', group:'香辛料', kind:'weight', spec:'500g 袋装 朝天椒', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'贵州/河南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'咖喱粉', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:36, yuanPerKg:36, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'姜黄粉', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:40, yuanPerKg:40, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'肉桂粉', group:'香辛料', kind:'weight', spec:'500g 袋装', unit:'千克(kg)', unitPrice:45, yuanPerKg:45, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'陈皮', group:'香辛料', kind:'weight', spec:'500g 袋装 干', unit:'千克(kg)', unitPrice:50, yuanPerKg:50, origin:'广东新会', updatedAt:'2026-08-18', source:'批发市场估算' },
+  /* ── 酱料调味（大众厨房） ── */
+  { name:'生抽（酱油）', group:'酱料调味', kind:'weight', spec:'10L 桶装 特级', unit:'升(L)', unitPrice:8, yuanPerKg:8, origin:'广东/江苏', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'老抽（酱油）', group:'酱料调味', kind:'weight', spec:'10L 桶装', unit:'升(L)', unitPrice:9, yuanPerKg:9, origin:'广东/江苏', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'蚝油', group:'酱料调味', kind:'weight', spec:'6kg 桶装', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'料酒', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:7, yuanPerKg:7, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'陈醋', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:9, yuanPerKg:9, origin:'山西', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'白醋', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:6, yuanPerKg:6, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'米醋', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:8, yuanPerKg:8, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'香醋', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:12, yuanPerKg:12, origin:'江苏镇江', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'蒸鱼豉油', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:13, yuanPerKg:13, origin:'广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鱼露', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:14, yuanPerKg:14, origin:'泰国/福建', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'豆瓣酱', group:'酱料调味', kind:'weight', spec:'10kg 桶装 红油', unit:'千克(kg)', unitPrice:14, yuanPerKg:14, origin:'四川郫县', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'甜面酱', group:'酱料调味', kind:'weight', spec:'5kg 桶装', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'北京/山东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'黄豆酱', group:'酱料调味', kind:'weight', spec:'5kg 桶装', unit:'千克(kg)', unitPrice:13, yuanPerKg:13, origin:'东北/山东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'番茄酱', group:'酱料调味', kind:'weight', spec:'3kg 罐装', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'新疆/内蒙', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'番茄沙司', group:'酱料调味', kind:'weight', spec:'1kg×12 袋装', unit:'千克(kg)', unitPrice:9, yuanPerKg:9, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'芝麻酱', group:'酱料调味', kind:'weight', spec:'5kg 桶装', unit:'千克(kg)', unitPrice:20, yuanPerKg:20, origin:'河北/河南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'花生酱', group:'酱料调味', kind:'weight', spec:'5kg 桶装', unit:'千克(kg)', unitPrice:22, yuanPerKg:22, origin:'山东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'沙拉酱', group:'酱料调味', kind:'weight', spec:'1kg×12 袋装', unit:'千克(kg)', unitPrice:15, yuanPerKg:15, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'芥末酱', group:'酱料调味', kind:'weight', spec:'1kg 装', unit:'千克(kg)', unitPrice:28, yuanPerKg:28, origin:'国产/日本', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'辣椒酱（蒜蓉）', group:'酱料调味', kind:'weight', spec:'5kg 桶装', unit:'千克(kg)', unitPrice:16, yuanPerKg:16, origin:'海南/湖南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'腐乳（红方）', group:'酱料调味', kind:'weight', spec:'1kg 装', unit:'千克(kg)', unitPrice:18, yuanPerKg:18, origin:'广西/云南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'南乳', group:'酱料调味', kind:'weight', spec:'1kg 装', unit:'千克(kg)', unitPrice:20, yuanPerKg:20, origin:'广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'味精', group:'酱料调味', kind:'weight', spec:'5kg 袋装 晶体', unit:'千克(kg)', unitPrice:14, yuanPerKg:14, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鸡精', group:'酱料调味', kind:'weight', spec:'5kg 袋装', unit:'千克(kg)', unitPrice:22, yuanPerKg:22, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'高汤（浓缩骨汤）', group:'酱料调味', kind:'weight', spec:'1kg 装 浓缩', unit:'千克(kg)', unitPrice:18, yuanPerKg:18, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'香油（芝麻油）', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:32, yuanPerKg:32, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'辣椒油（红油）', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:18, yuanPerKg:18, origin:'四川', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'花椒油', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:25, yuanPerKg:25, origin:'四川', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'橄榄油', group:'酱料调味', kind:'weight', spec:'5L 桶装 初榨', unit:'升(L)', unitPrice:45, yuanPerKg:45, origin:'西班牙/希腊', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'料酒/米酒（厨用）', group:'酱料调味', kind:'weight', spec:'5L 桶装', unit:'升(L)', unitPrice:8, yuanPerKg:8, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'白砂糖（调味分装）', group:'酱料调味', kind:'weight', spec:'1kg 装', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'广西/云南', updatedAt:'2026-08-18', source:'按白糖零售估算' },
+  /* ── 粮油干货（大众厨房） ── */
+  { name:'大米', group:'粮油干货', kind:'weight', spec:'25kg 袋装 东北长粒', unit:'千克(kg)', unitPrice:5.5, yuanPerKg:5.5, origin:'黑龙江/吉林', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'糯米', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'江苏/安徽', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'小米', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:9, yuanPerKg:9, origin:'山西/陕西', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'玉米面（细）', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'东北', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'绿豆', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:10, yuanPerKg:10, origin:'内蒙古/吉林', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'红豆', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:11, yuanPerKg:11, origin:'黑龙江', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'黄豆', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'东北', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'黑豆', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:10, yuanPerKg:10, origin:'东北', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'燕麦片', group:'粮油干货', kind:'weight', spec:'25kg 袋装', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'河北/内蒙古', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'粉丝（龙口）', group:'粮油干货', kind:'weight', spec:'5kg 箱装', unit:'千克(kg)', unitPrice:14, yuanPerKg:14, origin:'山东龙口', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'腐竹', group:'粮油干货', kind:'weight', spec:'5kg 箱装', unit:'千克(kg)', unitPrice:22, yuanPerKg:22, origin:'河南/广西', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'黑木耳（干）', group:'粮油干货', kind:'weight', spec:'5kg 箱装 秋耳', unit:'千克(kg)', unitPrice:65, yuanPerKg:65, origin:'东北', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'银耳（干）', group:'粮油干货', kind:'weight', spec:'5kg 箱装', unit:'千克(kg)', unitPrice:45, yuanPerKg:45, origin:'福建古田', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'香菇（干）', group:'粮油干货', kind:'weight', spec:'5kg 箱装 花菇', unit:'千克(kg)', unitPrice:85, yuanPerKg:85, origin:'福建/河南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'紫菜（干）', group:'粮油干货', kind:'weight', spec:'1kg 箱装', unit:'千克(kg)', unitPrice:50, yuanPerKg:50, origin:'福建/江苏', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'海带（干）', group:'粮油干货', kind:'weight', spec:'5kg 箱装', unit:'千克(kg)', unitPrice:18, yuanPerKg:18, origin:'山东/福建', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'红枣', group:'粮油干货', kind:'weight', spec:'5kg 箱装 若羌灰枣', unit:'千克(kg)', unitPrice:22, yuanPerKg:22, origin:'新疆', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'枸杞', group:'粮油干货', kind:'weight', spec:'5kg 箱装 中宁', unit:'千克(kg)', unitPrice:55, yuanPerKg:55, origin:'宁夏', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'花生米', group:'粮油干货', kind:'weight', spec:'25kg 袋装 红皮', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'河南/山东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'核桃（带壳）', group:'粮油干货', kind:'weight', spec:'10kg 箱装', unit:'千克(kg)', unitPrice:26, yuanPerKg:26, origin:'新疆/云南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'莲子（干）', group:'粮油干货', kind:'weight', spec:'5kg 箱装 去芯', unit:'千克(kg)', unitPrice:55, yuanPerKg:55, origin:'湖南/福建', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'桂圆干', group:'粮油干货', kind:'weight', spec:'5kg 箱装', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'福建/广西', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'淀粉（玉米淀粉小包装）', group:'粮油干货', kind:'weight', spec:'1kg 装', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  /* ── 肉禽蛋（大众厨房） ── */
+  { name:'猪肉（五花肉）', group:'肉禽蛋', kind:'weight', spec:'白条猪分割', unit:'千克(kg)', unitPrice:26, yuanPerKg:26, origin:'国产', updatedAt:'2026-08-18', source:'全国猪肉批发监测' },
+  { name:'猪肉（里脊）', group:'肉禽蛋', kind:'weight', spec:'分割里脊', unit:'千克(kg)', unitPrice:34, yuanPerKg:34, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'猪肉（排骨）', group:'肉禽蛋', kind:'weight', spec:'分割肋排', unit:'千克(kg)', unitPrice:38, yuanPerKg:38, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'牛肉（牛腩）', group:'肉禽蛋', kind:'weight', spec:'分割牛腩', unit:'千克(kg)', unitPrice:58, yuanPerKg:58, origin:'国产', updatedAt:'2026-08-18', source:'全国牛肉批发监测' },
+  { name:'牛肉（牛里脊）', group:'肉禽蛋', kind:'weight', spec:'分割里脊', unit:'千克(kg)', unitPrice:68, yuanPerKg:68, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'羊肉（羊腿）', group:'肉禽蛋', kind:'weight', spec:'分割羊腿', unit:'千克(kg)', unitPrice:62, yuanPerKg:62, origin:'内蒙古/新疆', updatedAt:'2026-08-18', source:'全国羊肉批发监测' },
+  { name:'鸡胸肉', group:'肉禽蛋', kind:'weight', spec:'冷冻分割', unit:'千克(kg)', unitPrice:16, yuanPerKg:16, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鸡腿（琵琶腿）', group:'肉禽蛋', kind:'weight', spec:'冷冻分割', unit:'千克(kg)', unitPrice:15, yuanPerKg:15, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鸡翅中', group:'肉禽蛋', kind:'weight', spec:'冷冻分割', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'整鸡（白条鸡）', group:'肉禽蛋', kind:'weight', spec:'冷冻白条', unit:'千克(kg)', unitPrice:14, yuanPerKg:14, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鸭肉（整鸭）', group:'肉禽蛋', kind:'weight', spec:'冷冻白条', unit:'千克(kg)', unitPrice:13, yuanPerKg:13, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'培根', group:'肉禽蛋', kind:'weight', spec:'1kg 袋装 冷冻', unit:'千克(kg)', unitPrice:35, yuanPerKg:35, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'火腿肠', group:'肉禽蛋', kind:'weight', spec:'1kg 袋装', unit:'千克(kg)', unitPrice:16, yuanPerKg:16, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'腊肠（广式）', group:'肉禽蛋', kind:'weight', spec:'1kg 袋装', unit:'千克(kg)', unitPrice:40, yuanPerKg:40, origin:'广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鲜虾（基围虾）', group:'肉禽蛋', kind:'weight', spec:'活鲜', unit:'千克(kg)', unitPrice:45, yuanPerKg:45, origin:'广东/福建', updatedAt:'2026-08-18', source:'全国水产品批发监测' },
+  { name:'虾仁（冷冻）', group:'肉禽蛋', kind:'weight', spec:'1kg 袋装 青虾仁', unit:'千克(kg)', unitPrice:48, yuanPerKg:48, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鱿鱼', group:'肉禽蛋', kind:'weight', spec:'冷冻整只', unit:'千克(kg)', unitPrice:22, yuanPerKg:22, origin:'山东/浙江', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'带鱼', group:'肉禽蛋', kind:'weight', spec:'冷冻整条', unit:'千克(kg)', unitPrice:18, yuanPerKg:18, origin:'浙江/福建', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鲈鱼（鲜活）', group:'肉禽蛋', kind:'weight', spec:'活鲜', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'广东', updatedAt:'2026-08-18', source:'全国水产品批发监测' },
+  { name:'三文鱼', group:'肉禽蛋', kind:'weight', spec:'冷冻鱼柳', unit:'千克(kg)', unitPrice:70, yuanPerKg:70, origin:'智利/挪威', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鱼丸', group:'肉禽蛋', kind:'weight', spec:'1kg 袋装', unit:'千克(kg)', unitPrice:20, yuanPerKg:20, origin:'福建/广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'虾滑', group:'肉禽蛋', kind:'weight', spec:'1kg 袋装', unit:'千克(kg)', unitPrice:35, yuanPerKg:35, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鸭蛋', group:'肉禽蛋', kind:'piece', spec:'散装 鲜', unit:'个', unitPrice:1.8, yuanPerKg:20, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'鹌鹑蛋', group:'肉禽蛋', kind:'weight', spec:'10kg 箱装', unit:'千克(kg)', unitPrice:16, yuanPerKg:16, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  /* ── 蔬菜菌菇（大众厨房） ── */
+  { name:'大葱', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:4, yuanPerKg:4, origin:'山东/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'小葱', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:8, yuanPerKg:8, origin:'云南/山东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'生姜', group:'蔬菜菌菇', kind:'weight', spec:'净姜', unit:'千克(kg)', unitPrice:9, yuanPerKg:9, origin:'山东/云南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'大蒜', group:'蔬菜菌菇', kind:'weight', spec:'干蒜头', unit:'千克(kg)', unitPrice:10, yuanPerKg:10, origin:'山东/河南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'洋葱', group:'蔬菜菌菇', kind:'weight', spec:'黄皮', unit:'千克(kg)', unitPrice:3, yuanPerKg:3, origin:'甘肃/内蒙古', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'土豆', group:'蔬菜菌菇', kind:'weight', spec:'黄心', unit:'千克(kg)', unitPrice:3.5, yuanPerKg:3.5, origin:'内蒙古/甘肃', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'红薯', group:'蔬菜菌菇', kind:'weight', spec:'红心', unit:'千克(kg)', unitPrice:4, yuanPerKg:4, origin:'河南/广东', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'番茄', group:'蔬菜菌菇', kind:'weight', spec:'大红', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'山东/云南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'黄瓜', group:'蔬菜菌菇', kind:'weight', spec:'水果黄瓜', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'山东/辽宁', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'胡萝卜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:3.5, yuanPerKg:3.5, origin:'山东/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'白萝卜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:2.5, yuanPerKg:2.5, origin:'山东/河南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'青椒', group:'蔬菜菌菇', kind:'weight', spec:'薄皮', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'山东/海南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'彩椒（红黄）', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:9, yuanPerKg:9, origin:'山东/内蒙', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'西兰花', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'云南/山东', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'花菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'云南/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'大白菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:2, yuanPerKg:2, origin:'山东/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'娃娃菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'云南/山东', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'菠菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'山东/云南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'油麦菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'云南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'芹菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:4, yuanPerKg:4, origin:'山东/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'韭菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'河北/山东', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'豆角（四季豆）', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:8, yuanPerKg:8, origin:'云南/山东', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'茄子', group:'蔬菜菌菇', kind:'weight', spec:'紫长茄', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'山东/辽宁', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'玉米（鲜）', group:'蔬菜菌菇', kind:'weight', spec:'甜玉米', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'云南/广东', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'香菇（鲜）', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'福建/河北', updatedAt:'2026-08-18', source:'全国食用菌批发监测' },
+  { name:'金针菇', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'江苏/福建', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'杏鲍菇', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:9, yuanPerKg:9, origin:'福建/山东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'平菇', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'河北/山东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'豆腐', group:'蔬菜菌菇', kind:'weight', spec:'北豆腐', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'老豆腐', group:'蔬菜菌菇', kind:'weight', spec:'硬豆腐', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'豆腐干', group:'蔬菜菌菇', kind:'weight', spec:'白干', unit:'千克(kg)', unitPrice:10, yuanPerKg:10, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'千张（豆腐皮）', group:'蔬菜菌菇', kind:'weight', spec:'薄百叶', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'国产', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'莲藕', group:'蔬菜菌菇', kind:'weight', spec:'净菜 脆藕', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'湖北/江苏', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'山药', group:'蔬菜菌菇', kind:'weight', spec:'铁棍山药', unit:'千克(kg)', unitPrice:8, yuanPerKg:8, origin:'河南/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'南瓜', group:'蔬菜菌菇', kind:'weight', spec:'老南瓜', unit:'千克(kg)', unitPrice:3.5, yuanPerKg:3.5, origin:'湖南/山东', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'冬瓜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:2.5, yuanPerKg:2.5, origin:'广东/海南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'丝瓜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'山东/海南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'苦瓜', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'山东/海南', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'秋葵', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'山东/广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'芦笋', group:'蔬菜菌菇', kind:'weight', spec:'净菜 绿芦笋', unit:'千克(kg)', unitPrice:18, yuanPerKg:18, origin:'山东/云南', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'西葫芦', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'山东/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'生菜', group:'蔬菜菌菇', kind:'weight', spec:'净菜 结球', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'云南/河北', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  { name:'上海青（油菜）', group:'蔬菜菌菇', kind:'weight', spec:'净菜', unit:'千克(kg)', unitPrice:4, yuanPerKg:4, origin:'云南/上海', updatedAt:'2026-08-18', source:'全国蔬菜批发监测' },
+  /* ── 水果鲜果（大众厨房） ── */
+  { name:'柠檬', group:'水果鲜果', kind:'piece', spec:'国产 一级', unit:'个', unitPrice:2, yuanPerKg:20, origin:'四川/广东', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'橙子', group:'水果鲜果', kind:'weight', spec:'赣南脐橙', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'江西', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'苹果', group:'水果鲜果', kind:'weight', spec:'红富士', unit:'千克(kg)', unitPrice:8, yuanPerKg:8, origin:'山东/陕西', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'香蕉', group:'水果鲜果', kind:'weight', spec:'国产', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'海南/云南', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'梨', group:'水果鲜果', kind:'weight', spec:'皇冠梨', unit:'千克(kg)', unitPrice:6, yuanPerKg:6, origin:'河北/山东', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'芒果', group:'水果鲜果', kind:'weight', spec:'贵妃芒', unit:'千克(kg)', unitPrice:10, yuanPerKg:10, origin:'海南/广西', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'西瓜', group:'水果鲜果', kind:'weight', spec:'麒麟瓜', unit:'千克(kg)', unitPrice:3.5, yuanPerKg:3.5, origin:'海南/山东', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'葡萄', group:'水果鲜果', kind:'weight', spec:'巨峰', unit:'千克(kg)', unitPrice:10, yuanPerKg:10, origin:'新疆/河北', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'草莓', group:'水果鲜果', kind:'weight', spec:'丹东99', unit:'千克(kg)', unitPrice:15, yuanPerKg:15, origin:'辽宁丹东', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'蓝莓', group:'水果鲜果', kind:'weight', spec:'国产', unit:'千克(kg)', unitPrice:30, yuanPerKg:30, origin:'云南/辽宁', updatedAt:'2026-08-18', source:'批发市场估算' },
+  { name:'猕猴桃', group:'水果鲜果', kind:'weight', spec:'翠香', unit:'千克(kg)', unitPrice:8, yuanPerKg:8, origin:'陕西/四川', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'火龙果', group:'水果鲜果', kind:'weight', spec:'红心', unit:'千克(kg)', unitPrice:8, yuanPerKg:8, origin:'海南/广西', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'菠萝', group:'水果鲜果', kind:'weight', spec:'鲜切', unit:'千克(kg)', unitPrice:7, yuanPerKg:7, origin:'海南/广东', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'桃子', group:'水果鲜果', kind:'weight', spec:'水蜜桃', unit:'千克(kg)', unitPrice:9, yuanPerKg:9, origin:'山东/江苏', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'柚子', group:'水果鲜果', kind:'weight', spec:'白肉', unit:'千克(kg)', unitPrice:5, yuanPerKg:5, origin:'福建/广西', updatedAt:'2026-08-18', source:'全国水果批发监测' },
+  { name:'百香果', group:'水果鲜果', kind:'weight', spec:'紫果', unit:'千克(kg)', unitPrice:12, yuanPerKg:12, origin:'广西/海南', updatedAt:'2026-08-18', source:'批发市场估算' },
 ];
 /* 价格库持久化 */
 function loadPrices(){
@@ -1754,6 +1928,27 @@ const ING_ALIAS = {
   '预拌粉（麻薯粉）':'麻薯预拌粉','麻薯粉':'麻薯预拌粉','核桃碎':'核桃仁','盐':'食用盐',
   '蓝莓泥':'蓝莓果泥','草莓泥':'草莓果泥',
   '牛奶':'纯牛奶','面粉':'中筋面粉',
+  /* 大众厨房常见口语/别名 → 价格库标准名 */
+  '酱油':'生抽（酱油）','生抽':'生抽（酱油）','老抽':'老抽（酱油）','生抽酱油':'生抽（酱油）','豉油':'生抽（酱油）',
+  '大料':'八角','八角茴香':'八角','茴香':'小茴香','香叶':'香叶','桂皮':'桂皮','花椒':'花椒','干辣椒':'干辣椒',
+  '白胡椒':'白胡椒粒','黑胡椒':'黑胡椒粒','胡椒粉':'白胡椒粉','黑胡椒碎':'黑胡椒粒','胡椒':'白胡椒粉',
+  '孜然':'孜然粒','辣椒面':'辣椒面（粗）','辣椒粉':'辣椒粉','五香粉':'五香粉','十三香':'十三香',
+  '料酒':'料酒','黄酒':'料酒','米酒':'料酒/米酒（厨用）','陈醋':'陈醋','香醋':'香醋','白醋':'白醋','米醋':'米醋',
+  '蚝油':'蚝油','豆瓣酱':'豆瓣酱','甜面酱':'甜面酱','黄豆酱':'黄豆酱','番茄酱':'番茄酱','芝麻酱':'芝麻酱','花生酱':'花生酱',
+  '味精':'味精','鸡精':'鸡精','高汤':'高汤（浓缩骨汤）','香油':'香油（芝麻油）','芝麻油':'香油（芝麻油）','辣椒油':'辣椒油（红油）','花椒油':'花椒油','橄榄油':'橄榄油',
+  '大米':'大米','米饭':'大米','糯米':'糯米','小米':'小米','绿豆':'绿豆','红豆':'红豆','黄豆':'黄豆',
+  '粉丝':'粉丝（龙口）','腐竹':'腐竹','木耳':'黑木耳（干）','黑木耳':'黑木耳（干）','银耳':'银耳（干）','香菇':'香菇（鲜）','干香菇':'香菇（干）','紫菜':'紫菜（干）','海带':'海带（干）',
+  '红枣':'红枣','枸杞':'枸杞','花生':'花生米','花生仁':'花生米','莲子':'莲子（干）','桂圆':'桂圆干',
+  '五花肉':'猪肉（五花肉）','里脊':'猪肉（里脊）','排骨':'猪肉（排骨）','猪肉':'猪肉（五花肉）',
+  '牛腩':'牛肉（牛腩）','牛肉':'牛肉（牛腩）','羊肉':'羊肉（羊腿）','羊腿':'羊肉（羊腿）',
+  '鸡胸':'鸡胸肉','鸡腿':'鸡腿（琵琶腿）','鸡翅':'鸡翅中','白条鸡':'整鸡（白条鸡）','鸡':'整鸡（白条鸡）','鸭':'鸭肉（整鸭）','整鸭':'鸭肉（整鸭）',
+  '虾':'鲜虾（基围虾）','基围虾':'鲜虾（基围虾）','虾仁':'虾仁（冷冻）','鱿鱼':'鱿鱼','带鱼':'带鱼','鲈鱼':'鲈鱼（鲜活）','三文鱼':'三文鱼','鱼丸':'鱼丸','虾滑':'虾滑',
+  '葱':'大葱','大葱':'大葱','小葱':'小葱','姜':'生姜','生姜':'生姜','蒜':'大蒜','大蒜':'大蒜','洋葱':'洋葱',
+  '土豆':'土豆','马铃薯':'土豆','红薯':'红薯','地瓜':'红薯','番茄':'番茄','西红柿':'番茄','黄瓜':'黄瓜','胡萝卜':'胡萝卜','白萝卜':'白萝卜',
+  '青椒':'青椒','彩椒':'彩椒（红黄）','西兰花':'西兰花','花菜':'花菜','白菜':'大白菜','娃娃菜':'娃娃菜','菠菜':'菠菜','芹菜':'芹菜','韭菜':'韭菜','豆角':'豆角（四季豆）','茄子':'茄子','玉米':'玉米（鲜）',
+  '金针菇':'金针菇','杏鲍菇':'杏鲍菇','平菇':'平菇','豆腐':'豆腐','老豆腐':'老豆腐','豆腐干':'豆腐干','千张':'千张（豆腐皮）','豆腐皮':'千张（豆腐皮）',
+  '莲藕':'莲藕','山药':'山药','南瓜':'南瓜','冬瓜':'冬瓜','丝瓜':'丝瓜','苦瓜':'苦瓜','秋葵':'秋葵','芦笋':'芦笋','西葫芦':'西葫芦','生菜':'生菜','油菜':'上海青（油菜）','上海青':'上海青（油菜）',
+  '柠檬':'柠檬','橙子':'橙子','苹果':'苹果','香蕉':'香蕉','梨':'梨','芒果':'芒果','西瓜':'西瓜','葡萄':'葡萄','草莓':'草莓','蓝莓':'蓝莓','猕猴桃':'猕猴桃','火龙果':'火龙果','菠萝':'菠萝','桃子':'桃子','柚子':'柚子','百香果':'百香果',
 };
 /* 食材名称 → 价格库最优匹配并换算（精确 > 库名包含在输入 > 输入包含库名） */
 function lookupPrice(name, rowUnit){
@@ -2489,7 +2684,7 @@ function renderPrices(){
     .sort((a,b) => (a.group||'').localeCompare(b.group||'') || (a.name||'').localeCompare(b.name||''));
   byId('priceList').innerHTML = list.map(priceCardHTML).join('');
   byId('priceEmpty').classList.toggle('hidden', list.length > 0);
-  byId('priceLibMeta').textContent = t('priceMeta', {n: priceLib.length, date: '2026-08-11'});
+  byId('priceLibMeta').textContent = t('priceMeta', {n: priceLib.length, date: '2026-08-18'});
   byId('priceNote').innerHTML = PRICE_SOURCE_NOTE;
 }
 
@@ -2991,6 +3186,18 @@ function init(){
     savePrices();
     toast(t('toastPriceLoaded', {n: priceLib.length}));
   }
+  // 内置价格库新增条目自动合并（按名称去重）：老用户设备也会同步到新版本补充的材料，且不覆盖用户已改价
+  const priceNames = new Set(priceLib.map(p => String(p.name || '').trim()));
+  let priceAdded = 0;
+  PRICE_LIBRARY.forEach((p, i) => {
+    const k = String(p.name || '').trim();
+    if(k && !priceNames.has(k)){
+      priceLib.push(Object.assign({ id: uid() + '_p' + i }, p));
+      priceNames.add(k);
+      priceAdded++;
+    }
+  });
+  if(priceAdded > 0){ savePrices(); toast(t('toastPriceSynced', {n: priceAdded})); }
   // 首次打开（库为空）自动载入内置配方库（含自动带出的参考单价）
   if(recipes.length === 0){
     const n = importBuiltin({ silent:true });
