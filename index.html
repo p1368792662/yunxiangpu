@@ -403,6 +403,7 @@ mark.hl{background:#ffe08a;color:inherit;border-radius:3px;padding:0 2px}
 /* 分类分段控件 */
 .seg{display:flex;flex-wrap:wrap;gap:8px}
 .seg button{
+  position:relative;
   padding:6px 14px;border-radius:var(--pill);
   border:none;background:rgba(120,120,128,.12);
   font-family:inherit;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;
@@ -410,6 +411,20 @@ mark.hl{background:#ffe08a;color:inherit;border-radius:3px;padding:0 2px}
 }
 .seg button:hover{background:rgba(120,120,128,.2);color:var(--text)}
 .seg button.active{background:var(--accent);color:#fff}
+/* 桌面悬停时浮现的「编辑」按钮，便于不习惯长按的用户 */
+.seg button .cat-edit{
+  position:absolute;top:-8px;right:-8px;
+  width:18px;height:18px;border-radius:50%;
+  background:#fff;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;line-height:1;color:var(--text2);
+  opacity:0;transform:scale(.7);
+  transition:opacity .15s var(--ease), transform .15s var(--ease);
+  box-shadow:0 1px 3px rgba(0,0,0,.10);cursor:pointer;
+}
+@media (hover:hover){
+  .seg button:hover .cat-edit{opacity:1;transform:scale(1)}
+}
 .seg button.cat-add{
   padding:6px 14px;border-radius:var(--pill);
   border:none;background:rgba(120,120,128,.12);
@@ -596,10 +611,55 @@ mark.hl{background:#ffe08a;color:inherit;border-radius:3px;padding:0 2px}
 .toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
 .toast.error{background:rgba(255,59,48,.9);color:#fff;border-color:rgba(255,255,255,.25)}
 
-/* 封面上传 */
-.cover-upload{display:flex;align-items:center;gap:10px;margin-top:6px}
-.cover-upload .cover-preview{width:64px;height:64px;border-radius:14px;object-fit:cover;border:1px solid var(--border);background:#fafafc;flex:none}
-.cover-actions{display:flex;gap:6px;flex-wrap:wrap}
+/* 封面上传（苹果风：干净克制，以大面积留白与细边框呈现，不再用渐变抢眼） */
+.cover-card{ /* 继承 .card：白底 + 1px 细边框，保持与其它分区一致 */ }
+.cover-card-head{margin-bottom:14px}
+.cover-card-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;color:var(--text);letter-spacing:-.01em}
+.cover-card-title .ic{width:19px;height:19px;flex:none;color:var(--text2)}
+.cover-card-sub{font-size:12px;color:var(--text3);margin-top:3px}
+.cover-well{
+  position:relative;width:100%;height:172px;border-radius:var(--radius);
+  background:#f5f5f7;border:1px solid var(--border);overflow:hidden;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .18s var(--ease);
+}
+.cover-well:hover{background:#ececee}
+.cover-well:active{background:#e4e4e7}
+.cover-well .cover-preview{width:100%;height:100%;object-fit:cover;display:block}
+.cover-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text3);font-size:13px}
+.cover-empty .ic{width:30px;height:30px;color:var(--text3);opacity:.85}
+.cover-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn-soft{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:9px 17px;font-size:13.5px;font-weight:500;font-family:inherit;
+  background:#fff;color:var(--text);cursor:pointer;
+  border:1px solid var(--border);border-radius:var(--pill);
+  transition:all .18s var(--ease);-webkit-tap-highlight-color:transparent;
+}
+.btn-soft:hover{background:#f5f5f7}
+.btn-soft:active{transform:scale(.97)}
+.btn-soft .ic{width:16px;height:16px;flex:none}
+.btn-soft-danger{color:#ff3b30}
+.btn-soft-danger:hover{background:rgba(255,59,48,.06)}
+
+/* 分类选择提示 */
+.seg-hint{font-size:12px;color:var(--text3);margin:9px 0 0;display:flex;align-items:center;gap:6px}
+.seg-hint::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.55}
+
+/* 分类操作动作面板（底部弹出） */
+#catActionOverlay{align-items:flex-end;justify-content:center;padding:0}
+.action-sheet{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:520px;padding:8px 8px calc(10px + env(safe-area-inset-bottom));animation:sheetIn .25s var(--ease)}
+.action-sheet .as-title{text-align:center;font-size:13px;color:var(--text3);padding:14px 0 10px}
+.action-sheet .as-btn{display:block;width:100%;border:none;background:transparent;font-family:inherit;font-size:17px;padding:15px 0;cursor:pointer;border-radius:12px;color:var(--text);transition:background .15s;-webkit-tap-highlight-color:transparent}
+.action-sheet .as-btn:hover{background:rgba(0,0,0,.04)}
+.action-sheet .as-btn:active{background:rgba(0,0,0,.08)}
+.action-sheet .as-danger{color:var(--danger);font-weight:600}
+.action-sheet .as-cancel{font-weight:600;margin-top:6px;background:rgba(120,120,128,.1)}
+.action-sheet .as-cancel:hover{background:rgba(120,120,128,.16)}
+@media (min-width:768px){
+  #catActionOverlay{align-items:center}
+  .action-sheet{border-radius:18px}
+}
 
 /* 表单内：隐藏价格 */
 #formOverlay .ing-row{grid-template-columns:1.4fr .8fr .9fr auto}
@@ -819,6 +879,27 @@ mark.hl{background:#ffe08a;color:inherit;border-radius:3px;padding:0 2px}
     </div>
 
     <div class="sheet-body">
+      <!-- 封面上传（苹果风：干净克制，置于表单最前） -->
+      <section class="card cover-card">
+        <div class="cover-card-head">
+          <div class="cover-card-title"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2"/><path d="m4 17 4.5-4 3 3L15 12l5 5"/></svg> <span data-i18n="coverLabel">添加封面</span></div>
+          <div class="cover-card-sub" data-i18n="coverSub">拍照或相册选图，让食谱更吸睛</div>
+        </div>
+        <div class="cover-well" id="coverWell" data-act="coverAlbum" data-i18n-title="coverTapAdd">
+          <img id="coverPreview" class="cover-preview hidden" alt="">
+          <div class="cover-empty" id="coverEmpty">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2"/><path d="m4 17 4.5-4 3 3L15 12l5 5"/></svg>
+            <span data-i18n="coverLabel">添加封面</span>
+          </div>
+        </div>
+        <div class="cover-actions">
+          <button type="button" class="btn btn-soft" data-act="coverCamera"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2.5h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg> <span data-i18n="cameraBtn">拍照</span></button>
+          <button type="button" class="btn btn-soft btn-soft-danger" data-act="coverClear" id="btnCoverClear" data-i18n-title="removeCoverBtn" hidden><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg> <span data-i18n="removeCoverBtn">移除</span></button>
+        </div>
+        <input type="file" id="coverCameraInput" accept="image/*" capture="environment" hidden>
+        <input type="file" id="coverAlbumInput" accept="image/*" hidden>
+      </section>
+
       <!-- ① 智能解析食谱 -->
       <section class="card">
         <div class="sec-title"><span data-i18n="bulkTitle">智能解析食谱</span><span class="sec-sub" data-i18n="bulkSub">粘贴小红书/朋友圈长文案，自动提取名称、食材、步骤</span></div>
@@ -835,17 +916,7 @@ mark.hl{background:#ffe08a;color:inherit;border-radius:3px;padding:0 2px}
         <input id="fName" class="input" data-i18n-placeholder="namePlaceholder" placeholder="例如：巴斯克芝士蛋糕" maxlength="40">
         <label style="margin-top:14px" data-i18n="catLabel">分类</label>
         <div id="catSeg" class="seg"></div>
-        <label style="margin-top:14px" data-i18n="coverLabel">封面（拍照 / 相册）</label>
-        <div class="cover-upload">
-          <img id="coverPreview" class="cover-preview hidden" alt="">
-          <div class="cover-actions">
-            <button type="button" class="mini-btn" data-act="coverCamera" data-i18n-title="cameraBtn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2.5h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg> <span data-i18n="cameraBtn">拍照</span></button>
-            <button type="button" class="mini-btn" data-act="coverAlbum" data-i18n-title="albumBtn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="16" height="12" rx="2"/><circle cx="8.5" cy="9.5" r="1.2"/><path d="m4.5 17 4.5-4 3.5 3 3-3 4 4"/></svg> <span data-i18n="albumBtn">相册</span></button>
-            <button type="button" class="mini-btn icon-danger" data-act="coverClear" id="btnCoverClear" data-i18n-title="removeCoverBtn" hidden><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg> <span data-i18n="removeCoverBtn">移除</span></button>
-          </div>
-        </div>
-        <input type="file" id="coverCameraInput" accept="image/*" capture="environment" hidden>
-        <input type="file" id="coverAlbumInput" accept="image/*" hidden>
+        <p class="seg-hint" data-i18n="catHint">长按分类标签可重命名或删除</p>
       </section>
 
       <!-- ③ 食材清单（成本核算） -->
@@ -984,11 +1055,33 @@ mark.hl{background:#ffe08a;color:inherit;border-radius:3px;padding:0 2px}
   <div class="dialog" role="dialog" aria-modal="true" aria-label="输入">
     <h3 id="promptTitle">请输入</h3>
     <input id="promptInput" class="input" style="margin:14px 0 6px" maxlength="24">
+  <div class="dialog-actions">
+    <button class="btn btn-secondary" data-act="promptCancel" data-i18n="confirmCancel">取消</button>
+    <button class="btn" data-act="promptOk" data-i18n="confirmOk">确定</button>
+  </div>
+</div>
+
+<!-- ═════════════ 分类操作动作面板（长按分类标签弹出） ═════════════ -->
+<div id="catActionOverlay" class="overlay hidden">
+  <div class="action-sheet">
+    <div class="as-title" id="catActionName"></div>
+    <button type="button" class="as-btn" data-act="renameCat"><span data-i18n="renameCat">重命名</span></button>
+    <button type="button" class="as-btn as-danger" data-act="deleteCat"><span data-i18n="deleteCat">删除</span></button>
+    <button type="button" class="as-btn as-cancel" data-act="closeCatAction" data-i18n="confirmCancel">取消</button>
+  </div>
+</div>
+
+<!-- ═════════════ 通用确认弹窗（删除分类等） ═════════════ -->
+<div id="appConfirmOverlay" class="overlay hidden">
+  <div class="dialog">
+    <h3 id="appConfirmTitle" data-i18n="confirmTitle">确认</h3>
+    <p id="appConfirmMsg"></p>
     <div class="dialog-actions">
-      <button class="btn btn-secondary" data-act="promptCancel" data-i18n="confirmCancel">取消</button>
-      <button class="btn" data-act="promptOk" data-i18n="confirmOk">确定</button>
+      <button class="btn btn-secondary" data-act="appConfirmCancel" data-i18n="confirmCancel">取消</button>
+      <button class="btn btn-danger" data-act="appConfirmOk" data-i18n="confirmDelete">删除</button>
     </div>
   </div>
+</div>
 </div>
 
 <!-- ═════════════ 彩蛋弹窗（连点左上角图标 5 次） ═════════════ -->
@@ -1037,8 +1130,12 @@ const I18N = {
   bulkPlaceholder:'例如：\n轻乳酪蛋糕‼️不回缩不塌陷超详细做法分享\n📝记录一下配方(1个6寸）\n鸡蛋3个\n奶油奶酪120克\n...\n📝制作过程\n1⃣奶油奶酪+黄油+牛奶隔水搅拌均匀\n...',
   parseBtn:'解析并添加', clearBtn:'清空',
   nameLabel:'食谱名称 *', namePlaceholder:'例如：巴斯克芝士蛋糕',
-  catLabel:'分类', coverLabel:'封面（拍照 / 相册）',
+  catLabel:'分类', catHint:'长按（或右键 / 悬停）分类标签可重命名或删除', coverLabel:'添加封面', coverSub:'拍照或相册选图，让食谱更吸睛', editCat:'编辑', coverTapAdd:'点击添加或更改封面',
   cameraBtn:'拍照', albumBtn:'相册', removeCoverBtn:'移除',
+  renameCat:'重命名', deleteCat:'删除', renameCatPrompt:'输入新的分类名称（最多 12 字）',
+  deleteCatConfirm:'确定删除分类「{name}」吗？该分类下的食谱将移到「{fallback}」',
+  catExists:'该分类名已存在', catNameTooLong:'分类名称最长 12 个字',
+  toastCatRenamed:'已重命名为「{name}」', toastCatDeleted:'已删除分类「{name}」',
   ingTitle:'食材清单', ingCount:'{n} 项', addIngBtn:'添加', calcBtn:'核算', addRowBtn:'添加一行食材', ingNamePlaceholder:'食材名称', ingAmountPlaceholder:'用量',
   stepsLabel:'制作步骤（每行一步）', stepsPlaceholder:'1. 奶油奶酪室温软化，加入细砂糖搅拌顺滑\n2. 分次加入鸡蛋，每次拌匀再加入…',
   notesLabel:'备注', notesPlaceholder:'口味偏好、保存方法、注意事项…',
@@ -1122,8 +1219,12 @@ const I18N = {
   bulkPlaceholder:'例：\nチーズケーキ‼️しっとり失敗しない作り方\n📝レシピメモ(6寸1個）\n卵3個\nクリームチーズ120g\n...\n📝作り方\n1⃣クリームチーズ+バター+牛乳を湯煎で混ぜる\n...',
   parseBtn:'解析して追加', clearBtn:'クリア',
   nameLabel:'レシピ名 *', namePlaceholder:'例：バスクチーズケーキ',
-  catLabel:'カテゴリ', coverLabel:'表紙（撮影 / アルバム）',
+  catLabel:'カテゴリ', catHint:'分類タグを長押し（右クリック／ホバー）で名前変更・削除', coverLabel:'表紙追加', coverSub:'撮影またはアルバムから選んで、レシピを華やかに', editCat:'編集', coverTapAdd:'タップして表紙を追加・変更',
   cameraBtn:'撮影', albumBtn:'アルバム', removeCoverBtn:'削除',
+  coverSub:'撮影またはアルバムから選んで、レシピを華やかに', renameCat:'名前を変更', deleteCat:'削除', renameCatPrompt:'新しい分類名を入力（最大 12 文字）',
+  deleteCatConfirm:'分類「{name}」を削除しますか？この分類のレシピは「{fallback}」に移動します',
+  catExists:'その分類名は既に存在します', catNameTooLong:'分類名は最大 12 文字です',
+  toastCatRenamed:'「{name}」に名前を変更しました', toastCatDeleted:'分類「{name}」を削除しました',
   ingTitle:'食材リスト', ingCount:'{n} 項目', addIngBtn:'追加', calcBtn:'原価計算', addRowBtn:'食材を1行追加', ingNamePlaceholder:'食材名', ingAmountPlaceholder:'分量',
   stepsLabel:'作り方（1行に1手順）', stepsPlaceholder:'1. クリームチーズを室温に戻し、砂糖を加えて滑らかにする\n2. 卵を数回に分けて加え、都度混ぜる…',
   notesLabel:'メモ', notesPlaceholder:'味の好み、保存方法、注意点…',
@@ -1207,8 +1308,12 @@ const I18N = {
   bulkPlaceholder:'예시：\n치즈케이크‼️꺼지지 않는 촉촉한 만들기\n📝레시피 기록(6인치 1개）\n계란3개\n크림치즈120g\n...\n📝만드는 방법\n1⃣크림치즈+버터+우유 중탕으로 섞기\n...',
   parseBtn:'분석하여 추가', clearBtn:'지우기',
   nameLabel:'레시피명 *', namePlaceholder:'예: 바스크 치즈케이크',
-  catLabel:'카테고리', coverLabel:'표지（촬영 / 앨범）',
+  catLabel:'카테고리', catHint:'분류 태그를 길게 누르거나(우클릭/호버) 이름 변경·삭제', coverLabel:'표지 추가', coverSub:'촬영 또는 앨범에서 선택해 레시피를 돋보이게', editCat:'편집', coverTapAdd:'탭하여 표지 추가 또는 변경',
   cameraBtn:'촬영', albumBtn:'앨범', removeCoverBtn:'제거',
+  renameCat:'이름 변경', deleteCat:'삭제', renameCatPrompt:'새 분류명 입력(최대 12자)',
+  deleteCatConfirm:'분류「{name}」를 삭제할까요? 이 분류의 레시피는「{fallback}」(으)로 이동합니다',
+  catExists:'이미 존재하는 분류명입니다', catNameTooLong:'분류명은 최대 12자입니다',
+  toastCatRenamed:'「{name}」(으)로 이름을 변경했습니다', toastCatDeleted:'분류「{name}」를 삭제했습니다',
   ingTitle:'식재료 목록', ingCount:'{n} 항목', addIngBtn:'추가', calcBtn:'원가 계산', addRowBtn:'식재료 한 줄 추가', ingNamePlaceholder:'식재료명', ingAmountPlaceholder:'수량',
   stepsLabel:'만드는 방법（한 줄에 한 단계）', stepsPlaceholder:'1. 크림치즈를 실온에 두고 설탕을 넣어 부드럽게 섞는다\n2. 계란을 여러 번 나누어 넣고 매번 섞는다…',
   notesLabel:'메모', notesPlaceholder:'맛 취향、보관 방법、주의사항…',
@@ -1292,8 +1397,12 @@ const I18N = {
   bulkPlaceholder:'Example:\nCheesecake ‼️ No-fail recipe\n📝 Recipe (1 x 6-inch）\nEggs 3\nCream cheese 120g\n...\n📝 Instructions\n1⃣ Melt cream cheese + butter + milk over hot water\n...',
   parseBtn:'Parse & Add', clearBtn:'Clear',
   nameLabel:'Recipe name *', namePlaceholder:'e.g. Basque Cheesecake',
-  catLabel:'Category', coverLabel:'Cover (camera / album)',
+  catLabel:'Category', catHint:'Long-press (or right-click / hover) a category tag to rename or delete', coverLabel:'Add cover', coverSub:'Pick from camera or album to make your recipe pop', editCat:'Edit', coverTapAdd:'Tap to add or change cover',
   cameraBtn:'Camera', albumBtn:'Album', removeCoverBtn:'Remove',
+  renameCat:'Rename', deleteCat:'Delete', renameCatPrompt:'Enter new category name (max 12 chars)',
+  deleteCatConfirm:'Delete category "{name}"? Its recipes will move to "{fallback}"',
+  catExists:'That category name already exists', catNameTooLong:'Category name is max 12 chars',
+  toastCatRenamed:'Renamed to "{name}"', toastCatDeleted:'Deleted category "{name}"',
   ingTitle:'Ingredients', ingCount:'{n} items', addIngBtn:'Add', calcBtn:'Calc', addRowBtn:'Add ingredient row', ingNamePlaceholder:'Ingredient name', ingAmountPlaceholder:'Amount',
   stepsLabel:'Steps (one per line)', stepsPlaceholder:'1. Soften cream cheese, add sugar and mix until smooth\n2. Add eggs in batches, mixing between each…',
   notesLabel:'Notes', notesPlaceholder:'Taste preference, storage, tips…',
@@ -1377,8 +1486,12 @@ const I18N = {
   bulkPlaceholder:'ตัวอย่าง：\nชีสเค้ก‼️สูตรนุ่มไม่ยุบ\n📝บันทึกสูตร(6 นิ้ว 1 ก้อน）\nไข่ 3 ฟอง\nครีมชีส 120 กรัม\n...\n📝วิธีทำ\n1⃣ ละลายครีมชีส + เนย + นม กวนบนน้ำร้อน\n...',
   parseBtn:'วิเคราะห์และเพิ่ม', clearBtn:'ล้าง',
   nameLabel:'ชื่อสูตร *', namePlaceholder:'เช่น บาสก์ชีสเค้ก',
-  catLabel:'หมวดหมู่', coverLabel:'หน้าปก（กล้อง / อัลบั้ม）',
+  catLabel:'หมวดหมู่', catHint:'กดค้าง (หรือคลิกขวา/ชี้) ที่แท็กหมวดหมู่เพื่อเปลี่ยนชื่อหรือลบ', coverLabel:'เพิ่มหน้าปก', coverSub:'ถ่ายหรือเลือกจากอัลบั้มให้สูตรดูน่าทานขึ้น', editCat:'แก้ไข', coverTapAdd:'แตะเพื่อเพิ่มหรือเปลี่ยนหน้าปก',
   cameraBtn:'กล้อง', albumBtn:'อัลบั้ม', removeCoverBtn:'ลบ',
+  coverSub:'ถ่ายหรือเลือกจากอัลบั้มให้สูตรดูน่าทานขึ้น', renameCat:'เปลี่ยนชื่อ', deleteCat:'ลบ', renameCatPrompt:'ป้อนชื่อหมวดหมู่ใหม่ (สูงสุด 12 ตัวอักษร)',
+  deleteCatConfirm:'ลบหมวดหมู่「{name}」ใช่หรือไม่? สูตรในหมวดนี้จะย้ายไป「{fallback}」',
+  catExists:'ชื่อหมวดหมู่นี้มีอยู่แล้ว', catNameTooLong:'ชื่อหมวดหมู่สูงสุด 12 ตัวอักษร',
+  toastCatRenamed:'เปลี่ยนชื่อเป็น「{name}」แล้ว', toastCatDeleted:'ลบหมวดหมู่「{name}」แล้ว',
   ingTitle:'รายการวัตถุดิบ', ingCount:'{n} รายการ', addIngBtn:'เพิ่ม', calcBtn:'คำนวณ', addRowBtn:'เพิ่มแถมวัตถุดิบ', ingNamePlaceholder:'ชื่อวัตถุดิบ', ingAmountPlaceholder:'ปริมาณ',
   stepsLabel:'วิธีทำ（แถมละขั้นตอน）', stepsPlaceholder:'1. นำครีมชีสออกจากตู้เย็น ใส่น้ำตาลแล้วคนจนเนียน\n2. ใส่ไข่ทีละน้อย คนให้เข้ากันทุกครั้ง…',
   notesLabel:'บันทึก', notesPlaceholder:'รสนิยม วิธีเก็บรักษา ข้อควรระวัง…',
@@ -1523,8 +1636,27 @@ const CUSTOM_CAT_GRAD = 'linear-gradient(135deg,#f7f7f7 0%,#ededed 100%)';
 let customCategories = loadCustomCats();
 function loadCustomCats(){ try{ const raw = localStorage.getItem(CUSTOM_CAT_KEY); return raw ? JSON.parse(raw) : []; }catch(e){ return []; } }
 function saveCustomCats(){ try{ localStorage.setItem(CUSTOM_CAT_KEY, JSON.stringify(customCategories)); }catch(e){} }
-function allCats(){ return CATEGORIES.concat(customCategories); }
+
+/* 分类覆盖层：支持重命名 / 隐藏（含内置甜品分类）。
+   renamed[原名] = 新名；hidden[] 为已删除的内置分类原名 */
+const CAT_OVERRIDE_KEY = 'yx-cat-overrides';
+let catOverrides = loadCatOverrides();
+function loadCatOverrides(){ try{ const o = JSON.parse(localStorage.getItem(CAT_OVERRIDE_KEY) || '{}'); return { renamed: o.renamed || {}, hidden: o.hidden || [] }; }catch(e){ return {renamed:{}, hidden:[]}; } }
+function saveCatOverrides(){ try{ localStorage.setItem(CAT_OVERRIDE_KEY, JSON.stringify(catOverrides)); }catch(e){} }
+
+function allCats(){
+  const builtin = CATEGORIES.filter(c => !catOverrides.hidden.includes(c.name))
+    .map(c => ({ name: catOverrides.renamed[c.name] || c.name, orig: c.name, builtin:true, grad: c.grad }));
+  const custom = customCategories.map(c => ({ name: catOverrides.renamed[c.name] || c.name, orig: c.name, custom:true, grad: c.grad }));
+  const merged = builtin.concat(custom);
+  // 重命名后若与已有分类重名，去重保留首个（renameCategory 已预先拦截，这里仅作兜底）
+  const seen = new Set(); const out = [];
+  merged.forEach(c => { if(!seen.has(c.name)){ seen.add(c.name); out.push(c); } });
+  return out;
+}
 function findCat(name){ return allCats().find(c => c.name === name) || CATEGORIES[CATEGORIES.length-1]; }
+/* 显示用分类名：应用重命名覆盖（让旧食谱也能跟随新名称显示/筛选） */
+function displayCat(name){ return catOverrides.renamed[name] || name; }
 function addCustomCategory(name){
   name = (name || '').trim();
   if(!name) return {ok:false, msg:'分类名称不能为空'};
@@ -1560,6 +1692,7 @@ let pendingDeleteId = null;        // 待删除的食谱 id
 let pendingDeleteKind = 'recipe';  // 待删除对象类型：recipe / price
 let currentDetailId = null;        // 详情面板中的食谱 id
 let pendingCover = null;           // 编辑表单中待保存的自定义封面（dataURL）
+let formCat = '蛋糕';               // 表单中当前选中的分类（有效名称）
 
 /* ═════════════════════ 工具函数 ═════════════════════ */
 function uid(){ return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
@@ -1611,7 +1744,7 @@ function toast(msg, type){
 }
 
 /* 弹层显隐（同时锁定/解锁页面滚动） */
-const OVERLAYS = ['formOverlay','detailOverlay','confirmOverlay','priceOverlay','priceFormOverlay','promptOverlay'];
+const OVERLAYS = ['formOverlay','detailOverlay','confirmOverlay','priceOverlay','priceFormOverlay','promptOverlay','catActionOverlay','appConfirmOverlay'];
 function show(id){ byId(id).classList.remove('hidden'); document.body.classList.add('lock'); }
 function hide(id){
   byId(id).classList.add('hidden');
@@ -1991,7 +2124,7 @@ function render(){
   const list = recipes.filter(r => {
     const catMatch = activeCat === '' ? true :
                      activeCat === '__fav__' ? !!r.favorite :
-                     r.category === activeCat;
+                     displayCat(r.category) === activeCat;
     return catMatch &&
       ((r.name||'').toLowerCase().includes(q) ||
        flatIngredients(r).some(i => (i.name||'').toLowerCase().includes(q)));
@@ -2019,7 +2152,7 @@ function render(){
 /* 主页分类筛选条（全部 + 各分类，含数量角标） */
 function renderCatFilter(){
   const counts = {};
-  recipes.forEach(r => { const c = r.category || '其他'; counts[c] = (counts[c]||0) + 1; });
+  recipes.forEach(r => { const c = displayCat(r.category) || '其他'; counts[c] = (counts[c]||0) + 1; });
   const favCount = recipes.filter(r => r.favorite).length;
   const chips = [`<button type="button" class="cat-chip${activeCat === '' ? ' on' : ''}" data-cat="">${t('catAll')} <span class="cnt">${recipes.length}</span></button>`]
     .concat(allCats().map(c => {
@@ -2033,7 +2166,7 @@ function renderCatFilter(){
 }
 function renderStats(list){
   const totalCost = list.reduce((s,r) => s + recipeCost(r), 0);
-  const cats = new Set(list.map(r => r.category)).size;
+  const cats = new Set(list.map(r => displayCat(r.category))).size;
   let html = t('statsTotal', {n: list.length, cost: fmt(totalCost), cats});
   if(activeCat) html = t('statsCatPrefix', {cat: tCat(activeCat)}) + html;
   byId('statsLine').innerHTML = html;
@@ -2041,7 +2174,7 @@ function renderStats(list){
 
 /* 食谱卡片 HTML */
 function cardHTML(r, i){
-  const cat = findCat(r.category);
+  const cat = findCat(displayCat(r.category));
   const cover = r.cover || coverFor(r.name);
   const q = searchTerm.trim().toLowerCase();
   const allIngs = flatIngredients(r);
@@ -2110,6 +2243,7 @@ function openForm(id){
   }
 }
 function setCat(name){
+  formCat = name;
   document.querySelectorAll('#catSeg button').forEach(b => b.classList.toggle('active', b.dataset.cat === name));
 }
 /* 食材分组 HTML */
@@ -2203,7 +2337,7 @@ function fallbackDetailHero(img){
   const hero = img.closest('.detail-hero');
   if(!hero) return;
   const r = recipes.find(x => x.id === currentDetailId);
-  const cat = findCat(r && r.category);
+  const cat = findCat(displayCat(r && r.category));
   hero.outerHTML = detailHeaderHTML(r, cat);
 }
 
@@ -2226,7 +2360,7 @@ function openDetail(id){
   const r = recipes.find(x => x.id === id);
   if(!r) return;
   currentDetailId = id;
-  const cat = findCat(r.category);
+  const cat = findCat(displayCat(r.category));
   const cover = r.cover;
   const groups = recipeGroups(r);
   const ingGroupsHTML = groups.map(g => {
@@ -2807,13 +2941,16 @@ function bulkFillIngredientPrices(){
 function renderCoverPicker(){
   const img = byId('coverPreview');
   const clearBtn = byId('btnCoverClear');
+  const empty = byId('coverEmpty');
   if(pendingCover){
     img.src = pendingCover;
     img.classList.remove('hidden');
+    if(empty) empty.classList.add('hidden');
     clearBtn.hidden = false;
   }else{
     img.src = '';
     img.classList.add('hidden');
+    if(empty) empty.classList.remove('hidden');
     clearBtn.hidden = true;
   }
 }
@@ -3045,6 +3182,12 @@ document.addEventListener('click', async e => {
     case 'applyBulkPaste': applyBulkPaste(); break;
     case 'clearBulkPaste': byId('bulkPaste').value=''; break;
     case 'saveForm':       saveForm(); break;
+    /* 分类操作面板 */
+    case 'renameCat':      renameCategory(); break;
+    case 'deleteCat':      deleteCategory(); break;
+    case 'closeCatAction': closeCatAction(); break;
+    case 'appConfirmOk':   closeAppConfirm(true); break;
+    case 'appConfirmCancel': closeAppConfirm(false); break;
   }
 });
 
@@ -3107,12 +3250,109 @@ function clearSearch(){
   render();
 }
 
-/* 分类分段控件 */
+/* 分类分段控件 + 长按 / 右键 / 悬停 编辑·删除 */
+let lpTimer = null, lpFired = false;
+function catBtnFrom(e){ const b = e.target.closest('button'); return (b && !b.dataset.act) ? b : null; }
 byId('catSeg').addEventListener('click', e => {
-  const b = e.target.closest('button');
-  if(!b || b.dataset.act) return;
+  const b = catBtnFrom(e);
+  if(!b) return;
+  if(e.target.closest('[data-act="catEdit"]')){ openCatAction(b); return; }  // 悬停浮现的编辑按钮
+  if(lpFired){ lpFired = false; return; }   // 长按/右键后抑制一次选择点击
   setCat(b.dataset.cat);
 });
+/* 桌面：鼠标左键按住 500ms 触发（长按） */
+byId('catSeg').addEventListener('mousedown', e => {
+  const b = catBtnFrom(e);
+  if(!b || e.button !== 0) return;
+  e.preventDefault();   // 避免长按过程中选中文字
+  lpFired = false;
+  clearTimeout(lpTimer);
+  lpTimer = setTimeout(() => { lpFired = true; openCatAction(b); }, 500);
+});
+byId('catSeg').addEventListener('mouseup', () => clearTimeout(lpTimer));
+byId('catSeg').addEventListener('mouseleave', () => clearTimeout(lpTimer));
+/* 移动端：触摸长按 550ms 触发 */
+byId('catSeg').addEventListener('touchstart', e => {
+  const b = catBtnFrom(e);
+  if(!b) return;
+  lpFired = false;
+  clearTimeout(lpTimer);
+  lpTimer = setTimeout(() => { lpFired = true; openCatAction(b); }, 550);
+}, { passive:true });
+byId('catSeg').addEventListener('touchend', () => clearTimeout(lpTimer));
+byId('catSeg').addEventListener('touchcancel', () => clearTimeout(lpTimer));
+byId('catSeg').addEventListener('touchmove', () => clearTimeout(lpTimer));
+/* 桌面：右键直接打开 */
+byId('catSeg').addEventListener('contextmenu', e => {
+  const b = catBtnFrom(e);
+  if(!b) return;
+  e.preventDefault();
+  lpFired = true;
+  openCatAction(b);
+});
+
+/* 分类操作：动作面板 / 重命名 / 删除 */
+let catActionOrig = null, catActionName = null;
+function openCatAction(b){
+  if(!byId('catActionOverlay').classList.contains('hidden')) return;
+  catActionOrig = b.dataset.orig;
+  catActionName = b.dataset.cat;
+  byId('catActionName').textContent = catActionName;
+  show('catActionOverlay');
+}
+function closeCatAction(){ hide('catActionOverlay'); }
+async function renameCategory(){
+  closeCatAction();
+  const cur = catActionName;
+  const name = await appPrompt(t('renameCatPrompt'), cur);
+  if(!name || name === cur) return;
+  if(name.length > 12){ toast(t('catNameTooLong'), 'error'); return; }
+  if(allCats().some(c => c.name === name && c.orig !== catActionOrig)){ toast(t('catExists'), 'error'); return; }
+  let n = 0;
+  recipes.forEach(r => { if(r.category === cur){ r.category = name; n++; } });
+  if(n) saveRecipes();
+  catOverrides.renamed[catActionOrig] = name;
+  saveCatOverrides();
+  renderCatSeg(); renderCatFilter(); render();
+  if(formCat === cur) setCat(name);
+  toast(t('toastCatRenamed', { name }));
+}
+async function deleteCategory(){
+  closeCatAction();
+  const cur = catActionName, orig = catActionOrig;
+  const fb = allCats().find(c => c.orig !== orig && c.name !== cur);
+  const fbName = fb ? fb.name : '其他';
+  const ok = await appConfirm(t('deleteCatConfirm', { name: cur, fallback: fbName }));
+  if(!ok) return;
+  let n = 0;
+  recipes.forEach(r => { if(r.category === cur){ r.category = fbName; n++; } });
+  if(n) saveRecipes();
+  if(customCategories.some(c => c.name === orig)){
+    customCategories = customCategories.filter(c => c.name !== orig);
+    saveCustomCats();
+  }else if(!catOverrides.hidden.includes(orig)){
+    catOverrides.hidden.push(orig);
+    saveCatOverrides();
+  }
+  renderCatSeg(); renderCatFilter(); render();
+  if(formCat === cur) setCat(fbName);
+  toast(t('toastCatDeleted', { name: cur }));
+}
+
+/* 通用确认弹窗（Promise） */
+let appConfirmResolve = null;
+function appConfirm(msg, title){
+  return new Promise(resolve => {
+    appConfirmResolve = resolve;
+    byId('appConfirmTitle').textContent = title || t('confirmTitle');
+    byId('appConfirmMsg').textContent = msg;
+    show('appConfirmOverlay');
+  });
+}
+function closeAppConfirm(result){
+  if(appConfirmResolve){ appConfirmResolve(result); appConfirmResolve = null; }
+  hide('appConfirmOverlay');
+}
 
 /* 表单事件 */
 byId('coverCameraInput').addEventListener('change', e => readCoverFile(e.target));
@@ -3123,6 +3363,8 @@ byId('importFile').addEventListener('change', e => readImportFile(e.target));
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape'){
     if(!byId('promptOverlay').classList.contains('hidden')){ closePrompt(null); return; }
+    if(!byId('appConfirmOverlay').classList.contains('hidden')){ closeAppConfirm(false); return; }
+    if(!byId('catActionOverlay').classList.contains('hidden')){ closeCatAction(); return; }
     hide('formOverlay'); hide('detailOverlay'); hide('confirmOverlay'); hide('priceOverlay'); hide('priceFormOverlay');
   }
 });
@@ -3130,12 +3372,14 @@ document.addEventListener('keydown', e => {
 byId('promptInput').addEventListener('keydown', e => {
   if(e.key === 'Enter'){ e.preventDefault(); closePrompt(byId('promptInput').value.trim()); }
 });
-/* 点击详情/表单弹层背景（非面板区）时：仅详情关闭（表单防误触丢数据）；输入弹窗背景点击取消 */
+/* 点击详情/表单弹层背景（非面板区）时：仅详情关闭（表单防误触丢数据）；输入弹窗背景点击取消；分类面板/确认弹窗背景点击关闭 */
 document.querySelectorAll('.overlay').forEach(ov => {
   ov.addEventListener('click', e => {
     if(e.target !== ov) return;
     if(ov.id === 'detailOverlay') hide('detailOverlay');
     if(ov.id === 'promptOverlay') closePrompt(null);
+    if(ov.id === 'catActionOverlay') closeCatAction();
+    if(ov.id === 'appConfirmOverlay') closeAppConfirm(false);
   });
 });
 
@@ -3241,7 +3485,7 @@ function init(){
 }
 function renderCatSeg(){
   const html = allCats().map(c =>
-    `<button type="button" data-cat="${c.name}" ${c.name === '蛋糕' ? 'class="active"' : ''}>${tCat(c.name)}</button>`
+    `<button type="button" data-cat="${esc(c.name)}" data-orig="${esc(c.orig)}" class="${c.name === formCat ? 'active' : ''}">${tCat(c.name)}<span class="cat-edit" data-act="catEdit" title="${esc(t('editCat')||'编辑')}" aria-label="${esc(t('editCat')||'编辑')}">&#9998;</span></button>`
   ).join('');
   byId('catSeg').innerHTML = html + `<button type="button" class="cat-add" data-act="addFormCat" title="${t('addCustomCat')||'添加自定义分类'}">+ ${t('newCategory') || '新分类'}</button>`;
 }
